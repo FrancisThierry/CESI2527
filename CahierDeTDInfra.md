@@ -1,137 +1,176 @@
 
 # 🚀 WeWeb : Le Commencement d'une Aventure Numérique
 
-**Date de création :** 2024
-**Fondateurs :** Alice Dupont et Ben Lemaire
-**Activité principale :** Conception et réalisation de sites web élégants et performants pour les petites et moyennes entreprises locales.
+![alt text](image.png)
+
+| **Aspect** | **Détail** |
+|---|---|
+| **Date de création** | 2024 |
+| **Fondateurs** | Alice Dupont et Ben Lemaire |
+| **Activité principale** | Conception et réalisation de sites web élégants et performants pour PME locales |
 
 ## I. L'Idée Fondatrice
 
-Tout commence dans un petit garage transformé en bureau, où Alice, une designer web talentueuse, et Ben, un développeur passionné par la performance, décident de s'associer. Leur constat est simple : beaucoup de PME ont des sites datés, lents et mal optimisés.
+Tout commence dans un petit garage transformé en bureau, où **Alice** (designer web talentueuse) et **Ben** (développeur passionné) décident de s'associer. 
 
-L'objectif d'**WeWeb** est de proposer des solutions numériques sur mesure, en mettant l'accent sur la **vitesse de chargement** et l'**expérience utilisateur (UX)**.
+**Constat** : Beaucoup de PME ont des sites datés, lents et mal optimisés.
+
+**Objectif WeWeb** : Proposer des solutions numériques sur mesure axées sur :
+- ⚡ **Vitesse de chargement**
+- 🎯 **Expérience utilisateur (UX)**
 
 ## II. L'Infrastructure Initiale : Le "Starter Pack" du LAN
 
-Pour démarrer, les fondateurs se concentrent sur une infrastructure locale, simple, mais fonctionnelle, pensée pour l'efficacité et le partage des ressources. C'est l'épine dorsale de l'entreprise à ses débuts :
+### 🔌 1. Connectivité et Cœur du Réseau
 
-### 1. La Connectivité et le Cœur du Réseau
+| Équipement | Rôle |
+|---|---|
+| **Routeur Wi-Fi** | Passerelle Internet & Distributeur DHCP |
+| **Switch 8 Ports** | Câblage Ethernet pour connexion stable |
 
-* **Le Routeur Wi-Fi (La Passerelle) :** C'est le point d'accès à Internet et le distributeur d'adresses IP pour tous les appareils. Il permet la connexion sans fil pour les smartphones et tablettes des fondateurs.
-* **Le Switch 8 Ports (Le Câblage) :** Un petit boîtier essentiel pour connecter les appareils critiques par câble Ethernet, assurant une connexion stable et rapide pour le transfert de gros fichiers de design et de code.
+### 💼 2. Postes de Travail et Ressources
 
-### 2. Les Postes de Travail et les Ressources
-
-* **Deux PC Windows :** Les postes de travail d'Alice (Design, graphisme) et de Ben (Développement, tests).
-* **Une Imprimante Réseau :** Partagée pour l'impression des contrats et des maquettes préliminaires.
-* **Un Serveur de Stockage (NAS) :** Le cœur du travail collaboratif. Il centralise tous les fichiers clients, les projets en cours, les bibliothèques de CSS/JS, et les sauvegardes. Il assure que les deux fondateurs travaillent sur la même version des données.
+- **2 PC Windows** : Alice (Design) & Ben (Développement)
+- **Imprimante Réseau** : Partage des contrats et maquettes
+- **Serveur NAS** : Centralisation des fichiers clients, projets, sauvegarde
 
 ## III. Le Défi pour les TD
 
-Alors que WeWeb prend de l'ampleur, les fondateurs se heurtent aux premières limites de leur installation :
+WeWeb fait face à ses premières limites :
+- ⚠️ Performance web insuffisante
+- 📦 Besoin d'une solution **CDN (Content Delivery Network)**
 
-* **La Performance Web :** Ils cherchent à améliorer la vitesse de livraison des assets (CSS, JS) de leurs sites clients, en envisageant une solution de type **CDN (Content Delivery Network)** pour l'avenir.
-
-**Votre mission** est d'accompagner WeWeb dans cette phase de croissance, en analysant, modélisant et faisant évoluer leur infrastructure de base pour répondre à ces nouveaux enjeux.
+**Votre mission** : Accompagner WeWeb dans sa croissance en analysant et évoluant son infrastructure.
 
 ---
 
 # 🛠️ Cahier de Travaux Dirigés - Infrastructure & Réseau WeWeb
 
-Ce cahier est structuré autour de l'évolution de l'infrastructure de la société WeWeb. Chaque atelier représente une étape clé dans la compréhension et l'optimisation des réseaux.
+Ce cahier couvre l'**évolution de l'infrastructure WeWeb** à travers des ateliers pratiques.
 
 ---
 
 ## 💻 Atelier 1 : Modélisation du Réseau Local (LAN) & Fondamentaux OSI
 
-**Objectif :** Visualiser l'architecture de base de WeWeb et réviser les couches fondamentales de communication réseau.
+**Objectif** : Visualiser l'architecture de base et réviser les couches OSI.
 
 ### 1.1 Représentation Physique
-* **Tâche :** Dessiner le schéma du réseau initial de WeWeb ou le modéliser à l'aide de **Cisco Packet Tracer**. 
 
-[Image of a basic small office network diagram showing two PCs, a server, a printer connected to a switch, which is connected to a WiFi router]
+**Tâche** : Dessiner ou modéliser le réseau initial avec **Cisco Packet Tracer**.
 
-* **Composants à inclure :** Deux PC Windows, un Serveur de Stockage (NAS), une Imprimante Réseau, un Switch, et un Routeur Wi-Fi.
-* **Livrable :** Un schéma clair montrant les connexions (Ethernet filaire vs. Wi-Fi) entre les équipements.
+![Diagramme réseau petit bureau : 2 PC, serveur, imprimante → switch → routeur Wi-Fi]
+
+**Composants** : 2 PC, NAS, imprimante, switch, routeur Wi-Fi
+
+**Livrable** : Schéma montrant connexions filaires vs. Wi-Fi
 
 ### 1.2 Identification des Rôles
-* **Tâche :** Décrire le rôle de chaque équipement dans le LAN de WeWeb.
-    * Quel équipement est la **Passerelle** ?
-    * Quel équipement est le point de concentration des connexions filaires ?
-    * Quel rôle joue le Serveur de Stockage par rapport aux postes clients ?
-* **Livrable :** Un tableau de synthèse des rôles et des protocoles utilisés (ex: DHCP, NAT).
+
+| Question | Réponse |
+|---|---|
+| **Passerelle** ? | |
+| **Point de concentration filaire** ? | |
+| **Rôle du NAS** ? | |
+
+**Livrable** : Tableau synthétique des rôles et protocoles (DHCP, NAT)
 
 ### 1.3 Exercice : Devinez la Couche OSI 🧐
 
-**Objectif :** Associer chaque description à la couche correspondante du modèle **OSI** (Open Systems Interconnection). Remplissez la colonne de droite avec le **numéro de la couche** (de 1 à 7).
+Associez chaque description au **numéro de couche OSI** (1-7) :
 
-| Description/Rôle Clé | Couche OSI Correspondante (Numéro 1 à 7) |
-| :--- | :---: |
-| Responsable de la transmission brute des bits sur le support physique (câbles, ondes radio). Détermine les spécifications électriques et mécaniques. | |
-| Gère l'accès au support (MAC) et le contrôle d'erreurs au niveau local. Protocole d'exemple : Ethernet. | |
-| Gère l'adressage logique (IP) et le routage des paquets à travers des réseaux multiples. | |
-| Assure la communication de bout en bout et gère la fiabilité (TCP) ou la rapidité (UDP) de la livraison des données. | |
-| Établit, gère et termine les sessions de communication entre deux applications. | |
-| S'occupe de la traduction, du chiffrement et de la compression des données pour s'assurer que les applications peuvent les lire. | |
-| Couche la plus proche de l'utilisateur final. Fournit des services réseau aux applications. Protocole d'exemple : HTTP, FTP, DNS. | |
+| Description | Couche |
+|:---|:---:|
+| Transmission brute des bits (câbles, ondes radio) | |
+| Accès au support (MAC) - Exemple : Ethernet | |
+| Adressage logique (IP) et routage | |
+| Communication bout à bout (TCP/UDP) | |
+| Gestion des sessions | |
+| Traduction, chiffrement, compression | |
+| Services applicatifs - Exemple : HTTP, DNS | |
 
 ---
 
-## 📱 Atelier 2 : Création d'un Réseau PAM (Point d'Accès Mobile) et Intégration WSL
+## 📱 Atelier 2 : Réseau PAM et Intégration WSL
 
-**Objectif :** Comprendre le fonctionnement d'un mini-réseau mobile (PAM) et maîtriser la mise en réseau de sous-systèmes logiciels (WSL) sur la machine hôte.
+**Objectif** : Maîtriser le **PAM (Point d'Accès Mobile)** et la mise en réseau **WSL**.
 
-### Qu'est-ce qu'un Réseau PAM ?
-Le **PAM (Point d'Accès Mobile)**, ou Hotspot, transforme un appareil mobile (smartphone, tablette) en **routeur Wi-Fi**. Il crée un petit **LAN** temporaire et utilise la connexion de données de l'opérateur (4G/5G) comme connexion Internet externe. Il agit comme un **routeur NAT/DHCP** pour les appareils connectés (PC, autres smartphones).
+### 📌 Qu'est-ce qu'un PAM ?
 
-### 2.1 Mise en Place du Réseau PAM
-* **Tâche :** Activer la fonction **Point d'Accès Mobile** sur votre smartphone.
-* **Tâche :** Connecter votre **PC Windows** au réseau Wi-Fi émis par le smartphone.
+**PAM = Hotspot mobile** transformant votre smartphone en routeur Wi-Fi (NAT/DHCP) utilisant la 4G/5G.
+
+### 2.1 Mise en Place du PAM
+
+✅ Activer le **Point d'Accès Mobile** sur votre smartphone  
+✅ Connecter votre **PC Windows** en Wi-Fi
 
 ### 2.2 Analyse du Réseau Hôte
-* **Tâche :** Depuis le PC, utiliser la commande `ipconfig` (Windows) pour identifier :
-    * L'**adresse IP** de votre PC (client).
-    * L'**adresse IP de la passerelle** (votre smartphone).
-* **Tâche :** Tester la connectivité (`ping`) entre le PC et le smartphone.
-* **Livrable :** Les adresses IP obtenues et le résultat du test de `ping`.
 
-### 2.3 Intégration du Sous-Système Linux (WSL)
-* **Contexte :** WSL est une machine virtuelle légère intégrée à Windows. Dans la version **WSL 2**, le sous-système Linux a sa propre adresse IP.
-* **Tâche :** Ouvrir votre distribution Linux sous WSL 2 (ex: Ubuntu).
-* **Tâche :** Utiliser la commande `ip a` ou `ifconfig` dans WSL pour trouver l'**adresse IP** de votre machine Linux.
-* **Tâche :** Effectuer les tests de connectivité suivants :
-    1.  `ping` du **PC Windows** vers l'adresse IP du **WSL**.
-    2.  `ping` du **WSL** vers l'adresse IP du **PC Windows**.
-    3.  `ping` du **WSL** vers l'adresse IP de la **Passerelle PAM** (votre smartphone).
-* **Livrable :** L'adresse IP du WSL et les résultats des trois tests de `ping`.
+**Commandes** :
+```bash
+ipconfig          # Identifier IP PC et passerelle
+ping [smartphone] # Tester la connectivité
+```
+
+**Livrable** : Adresses IP + résultat `ping`
+
+### 2.3 Intégration WSL 2
+
+**Commandes WSL** :
+```bash
+ip a              # Trouver l'IP du WSL
+ping [PC_IP]      # Ping vers Windows
+ping [Passerelle] # Ping vers smartphone
+```
+
+**Tests de connectivité à valider** :
+1. ✓ PC Windows → WSL
+2. ✓ WSL → PC Windows
+3. ✓ WSL → Passerelle PAM
+
+**Livrable** : IP du WSL + résultats des 3 tests
 
 ---
 
-## 🌐 Atelier 3 : Conception et Implémentation d'un CDN Statique Local
+## 🌐 Atelier 3 : CDN Statique Local
 
-**Objectif :** Simuler l'amélioration de la performance des sites web de WeWeb en concevant et déployant un serveur de distribution de contenu (CDN) local pour les ressources statiques (CSS, JS).
+**Objectif** : Déployer un **CDN local** pour améliorer la performance des ressources statiques.
 
 ### 3.1 Conception et Sécurité du CDN
 
-* **Tâche :** Dessiner l'architecture d'un CDN simplifié (comprenant le serveur source, les serveurs de cache périphériques et les utilisateurs). 
-* **Question 1 : DMZ (Zone Démilitarisée)**
-    * **Analyse :** Faut-il placer les serveurs CDN (qui servent du contenu public) dans une **DMZ** si l'on considère la sécurité de l'infrastructure de WeWeb ? Argumenter votre réponse.
-* **Question 2 : Opérations d'Infrastructure sur un CDN**
-    * **Analyse :** Citer et décrire trois opérations d'infrastructure essentielles que WeWeb devrait mettre en place pour gérer efficacement son CDN (ex: la mise en cache, la purge, la journalisation).
-* **Livrable :** Le schéma de l'architecture CDN, l'analyse sur la DMZ, et la description des trois opérations d'infrastructure.
+**Tâche** : Dessiner l'architecture CDN (serveur source → caches → utilisateurs)
 
-### 3.2 Implémentation du CDN Statique avec WSL et PAM
+#### ❓ Question 1 : DMZ
+Faut-il placer les serveurs CDN (contenu public) en **DMZ** ?  
+**Argumenter votre réponse.**
 
-* **Tâche :** Installer un serveur Web léger (ex: **Nginx** ou **Apache**) dans votre sous-système **WSL** (machine Linux).
-    * *Rappel : L'adresse IP du WSL agit comme l'adresse du serveur CDN local.*
-* **Tâche :** Créer un répertoire de contenu statique dans WSL et y placer :
-    * Un fichier CSS simple : `style.css`
-    * Un fichier JavaScript simple : `script.js`
-* **Tâche :** S'assurer que le service web est démarré dans WSL et écoute sur le port 80 ou 8080.
-* **Test d'Accès au CDN (Client) :**
-    * Depuis votre **smartphone** (client connecté au réseau PAM), ouvrir un navigateur.
-    * Accéder aux fichiers statiques en utilisant l'adresse IP du WSL :
-        * `http://[Adresse_IP_WSL]/style.css`
-        * `http://[Adresse_IP_WSL]/script.js`
-* **Livrable :** La commande utilisée pour démarrer le serveur Web dans WSL et la confirmation de l'accès réussi depuis le smartphone.
+#### ❓ Question 2 : Opérations Infrastructure
+Citer et décrire **3 opérations essentielles** pour gérer le CDN :
+- (ex: mise en cache, purge, journalisation)
+
+**Livrable** : Schéma + analyses DMZ & opérations
+
+### 3.2 Implémentation avec WSL et PAM
+
+**Étape 1** : Installer un serveur web dans WSL
+```bash
+# Ubuntu/Debian
+sudo apt update && sudo apt install nginx
+sudo systemctl start nginx
+```
+
+**Étape 2** : Créer contenu statique
+```bash
+mkdir -p /var/www/cdn
+echo "/* CSS */" > /var/www/cdn/style.css
+echo "// JS" > /var/www/cdn/script.js
+```
+
+**Étape 3** : Tester depuis le smartphone
+```
+http://[IP_WSL]/style.css
+http://[IP_WSL]/script.js
+```
+
+**Livrable** : Commandes + Preuve d'accès réussi
+
 
