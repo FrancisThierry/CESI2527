@@ -9,3 +9,5 @@ https://www.osboxes.org/centos/
 ## Virtual Box
 https://www.virtualbox.org/
 
+## lazydocker
+https://github.com/jesseduffield/lazydocker
