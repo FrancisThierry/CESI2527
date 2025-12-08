@@ -28,6 +28,13 @@ Tout commence dans un petit garage transformé en bureau, où **Alice** (designe
 | **Routeur Wi-Fi** | Passerelle Internet & Distributeur DHCP |
 | **Switch 8 Ports** | Câblage Ethernet pour connexion stable |
 
+
+
+
+
+
+
+
 ### 💼 2. Postes de Travail et Ressources
 
 - **2 PC Windows** : Alice (Design) & Ben (Développement)
@@ -94,6 +101,20 @@ graph TB
 | **Passerelle** ? | |
 | **Point de concentration filaire** ? | |
 | **Rôle du NAS** ? | |
+
+
+J'ai déjà fourni la réponse au format Markdown dans ma première réponse, ainsi que dans ma deuxième réponse.
+
+Voici la version complète en **Markdown** (format tableau) :
+
+| Question | Réponse |
+|---|---|
+| **Passerelle** ? | Une **passerelle** (ou **gateway**) est un nœud de réseau qui sert de point d'arrêt pour les données avant de passer d'un réseau à un autre, agissant comme un **traducteur** pour communiquer entre des réseaux utilisant des protocoles différents. |
+| **Point de concentration filaire** ? | Le **point de concentration filaire** est un équipement réseau (généralement un **Switch** ou, anciennement, un Hub) utilisé pour **interconnecter physiquement** et gérer la circulation des données entre plusieurs dispositifs au sein d'un même réseau local (LAN). |
+| **Rôle du NAS** ? | Le **NAS** (**Network-Attached Storage**) est un serveur de stockage dédié connecté au réseau dont le rôle principal est de fournir un espace **centralisé et partagé** pour le stockage, la sauvegarde et l'accès aux fichiers pour tous les utilisateurs du réseau. |
+
+
+
 
 **Livrable** : Tableau synthétique des rôles et protocoles (DHCP, NAT)
 
@@ -194,46 +215,74 @@ ping 172.25.159.246
 **Tâche** : Dessiner l'architecture CDN (serveur source → caches → utilisateurs)
 
 
-```mermaid
-graph LR
-    Users["👥 Utilisateurs<br/>(Smartphones/PC)"]
-    Cache1["⚡ Cache 1<br/>(Région 1)"]
-    Cache2["⚡ Cache 2<br/>(Région 2)"]
-    Cache3["⚡ Cache 3<br/>(Région 3)"]
-    Origin["🖥️ Serveur Origine<br/>(Source)"]
-    
-    Users -->|Requête| Cache1
-    Users -->|Requête| Cache2
-    Users -->|Requête| Cache3
-    
-    Cache1 -->|Miss: Récupère| Origin
-    Cache2 -->|Miss: Récupère| Origin
-    Cache3 -->|Miss: Récupère| Origin
-    
-    Origin -->|Réplique contenu| Cache1
-    Origin -->|Réplique contenu| Cache2
-    Origin -->|Réplique contenu| Cache3
-    
-    Cache1 -->|Contenu en cache| Users
-    Cache2 -->|Contenu en cache| Users
-    Cache3 -->|Contenu en cache| Users
-    
-    style Origin fill:#ff6b6b
-    style Cache1 fill:#51cf66
-    style Cache2 fill:#51cf66
-    style Cache3 fill:#51cf66
-    style Users fill:#4dabf7
+
+# Mettre en place un système de cache dans Ngnix
+
+#### Configuration Nginx pour Cache CDN
+
+**Étape 1** : Modifier la configuration Nginx
+```bash
+sudo nano /etc/nginx/sites-available/default
 ```
+
+**Étape 2** : Ajouter les directives de cache
+```nginx
+# Configuration du cache
+proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=cdn_cache:10m max_size=1g inactive=60m;
+
+server {
+    listen 80;
+    server_name _;
+    
+    # Servir les fichiers statiques avec cache
+    location ~* \.(css|js|jpg|png|gif|ico|svg|woff|woff2)$ {
+        root /var/www/cdn;
+        expires 30d;  # Cache navigateur
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # Proxy avec cache serveur
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_cache cdn_cache;
+        proxy_cache_valid 200 10m;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        add_header X-Cache-Status $upstream_cache_status;
+    }
+}
+```
+
+**Étape 3** : Tester et valider
+```bash
+sudo nginx -t
+sudo systemctl restart nginx
+curl -I http://[IP_WSL]/style.css  # Vérifier headers Cache-Control
+```
+
+**Vérifier le cache** :
+```bash
+ls -la /var/cache/nginx/  # Fichiers en cache
+```
+
 
 
 
 #### ❓ Question 1 : DMZ
 Faut-il placer les serveurs CDN (contenu public) en **DMZ** ?  
-**Argumenter votre réponse.**
+
+**Oui, les serveurs CDN doivent être placés en DMZ.**
+
+**Justification :**
+- Les serveurs CDN servent du contenu **public** accessible depuis Internet
+- La DMZ isole ces serveurs du réseau interne (LAN) pour limiter les risques de sécurité
+- En cas de compromission d'un serveur CDN, l'attaquant ne peut pas accéder directement aux données sensibles du réseau interne
+- Les pare-feu contrôlent les flux : Internet ↔ DMZ (autorisé) et DMZ ↔ Réseau interne (restreint)
+
 
 #### ❓ Question 2 : Opérations Infrastructure
 Citer et décrire **3 opérations essentielles** pour gérer le CDN :
 - (ex: mise en cache, purge, journalisation)
+
 
 **Livrable** : Schéma + analyses DMZ & opérations
 
@@ -265,4 +314,92 @@ http://[IP_WSL]/script.js
 
 **Livrable** : Commandes + Preuve d'accès réussi
 
+C'est une excellente clarification \! Le choix de l'outil de test est crucial. **Cypress** et **Selenium** sont les deux géants dans le domaine de l'automatisation des tests **End-to-End (E2E)**.
 
+Pour la nature de cet atelier (vérification rapide du front-end et de l'intégration CDN), nous allons choisir **Cypress** pour sa simplicité d'installation et sa rapidité d'exécution, tout en notant que **Selenium** est l'outil de prédilection pour les tests multi-navigateurs plus complexes.
+
+Voici la mise à jour de l'**Atelier 4** intégrant cette spécification.
+
+-----
+
+## ⚙️ Atelier 4 : Tests Automatisés et Environnement Isolé (VM)
+
+**Objectif** : Déployer un environnement de test isolé (VM) capable d'exécuter des tests de performance et de fonctionnalité sur le site web servi par le CDN local (WSL/Nginx).
+
+-----
+
+### 4.1. Justification de la Machine Virtuelle (VM)
+
+L'utilisation d'une **Machine Virtuelle (VM)** est une pratique standard en développement et en assurance qualité pour plusieurs raisons fondamentales :
+
+1.  **Isolation** : La VM crée un environnement de test **séparé** et **isolé** du système d'exploitation hôte.
+2.  **Reproductibilité** : Elle permet de figer un état précis du système via un **snapshot**, garantissant des conditions de test identiques à chaque exécution.
+3.  **Simulation** : Elle simule facilement des environnements clients ou serveurs spécifiques.
+4.  **Sécurité** : Tester du code ou des configurations réseau risquées se fait sans danger pour le réseau interne.
+
+-----
+
+### 4.2. Choix Technologiques pour la VM
+
+| Catégorie | Technologie suggérée | Rôle & Justification |
+| :--- | :--- | :--- |
+| **Hyperviseur** | **VirtualBox** (Gratuit) ou **Hyper-V** | Crée et gère la VM sur le PC hôte. |
+| **OS Invité** | **Ubuntu Desktop** (pour l'affichage graphique de Cypress) | Système sur lequel les outils seront installés. La version **Desktop** est requise pour pouvoir lancer l'interface graphique de Cypress. |
+| **Outil de Test E2E** | **Cypress** | Pour l'atelier : **Cypress** est plus simple et rapide à installer (Node.js) et offre une excellente expérience pour les tests modernes du site web. *Alternative :* **Selenium** est à préférer si l'objectif est de tester une compatibilité stricte sur tous les navigateurs (Chrome, Firefox, Edge, etc.). |
+| **Outil de Test de Performance** | **Apache JMeter** | Simule des charges lourdes pour mesurer la vitesse de chargement et l'efficacité du cache CDN. |
+
+-----
+
+### 4.3. Implémentation Pratique : Configuration Cypress
+
+**Tâche** : Préparer la VM pour exécuter un test **Cypress** qui vérifie l'accessibilité du site web via le CDN local.
+
+1.  **Installation de l'Hyperviseur et de l'OS** : Installer **VirtualBox** et créer une VM avec **Ubuntu Desktop**.
+2.  **Configuration Réseau** : S'assurer que la VM est configurée en mode **NAT** ou **Bridge** pour accéder à l'IP du WSL/Nginx (votre CDN local).
+3.  **Installation des Prérequis** (dans la VM Ubuntu) : Installer **Node.js** et **npm** (nécessaires pour Cypress).
+    ```bash
+    sudo apt update
+    sudo apt install nodejs npm
+    ```
+4.  **Installation de Cypress** : Créer un répertoire de projet et installer Cypress localement.
+    ```bash
+    mkdir weweb-e2e-tests
+    cd weweb-e2e-tests
+    npm init -y
+    npm install cypress --save-dev
+    ```
+5.  **Création du Test** : Ouvrir Cypress, créer un fichier de test (`cdn_access.cy.js`) et y écrire un test simple.
+
+#### Exemple de Script Cypress
+
+Ce script simule un utilisateur et vérifie que le site, et par extension ses ressources statiques (servies par le CDN), sont accessibles :
+
+```javascript
+// cdn_access.cy.js
+describe('Vérification de l\'accessibilité du site via CDN', () => {
+  it('Doit charger la page principale et vérifier l\'accès à une ressource CDN', () => {
+    // Remplacer [IP_WSL] par l'adresse IP de votre WSL/Nginx
+    const wsl_ip = 'http://[IP_WSL]'; 
+    
+    // 1. Accéder au serveur CDN local
+    cy.visit(wsl_ip); 
+    
+    // 2. Vérifier que la page par défaut Nginx s'affiche (Titre)
+    cy.title().should('include', 'Welcome to nginx!');
+    
+    // 3. Vérifier que la ressource statique (CSS) est accessible (simulé par un cy.request)
+    // Cela confirme que la route et le cache Nginx fonctionnent pour les fichiers statiques.
+    cy.request({
+      url: `${wsl_ip}/style.css`,
+      failOnStatusCode: true, // Doit retourner 200
+    }).its('headers')
+      .its('content-type')
+      .should('include', 'text/css');
+  });
+});
+```
+
+**Livrable** :
+
+1.  La justification (en 3 points maximum) du choix de **Cypress** sur **Selenium** pour cet atelier.
+2.  Le résultat du test Cypress (succès/échec) dans l'interface graphique de la VM après exécution du script ci-dessus.
