@@ -213,7 +213,30 @@ ping 172.25.159.246
 ### 3.1 Conception et Sécurité du CDN
 
 **Tâche** : Dessiner l'architecture CDN (serveur source → caches → utilisateurs)
+```mermaid
+flowchart LR
+  Win[Machine Windows
+Nodejs
+Site Web]
+  WSL[WSL
+Nginx - CDN]
+  Phone[Smartphone
+Partage reseau]
+  BrowserPC[Navigateur Windows]
+  BrowserPhone[Navigateur Smartphone]
 
+  Phone -->|partage reseau| Win
+
+  BrowserPC -->|requete HTTP| Win
+  BrowserPhone -->|requete HTTP| Win
+
+  Win -->|demande ressources statiques| WSL
+  WSL -->|sert CDN| Win
+
+  Win -->|reponse Web| BrowserPC
+  Win -->|reponse Web| BrowserPhone
+
+```
 
 
 # Mettre en place un système de cache dans Ngnix
@@ -403,3 +426,11 @@ describe('Vérification de l\'accessibilité du site via CDN', () => {
 
 1.  La justification (en 3 points maximum) du choix de **Cypress** sur **Selenium** pour cet atelier.
 2.  Le résultat du test Cypress (succès/échec) dans l'interface graphique de la VM après exécution du script ci-dessus.
+   
+
+## Installation node sur Centos
+iutiliser loadkeys fr sur centos pour clavier en français
+
+curl -sL https://rpm.nodesource.com/setup_20.x | sudo bash -
+
+sudo yum install nodejs
