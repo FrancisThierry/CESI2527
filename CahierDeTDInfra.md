@@ -64,6 +64,29 @@ Ce cahier couvre l'**évolution de l'infrastructure WeWeb** à travers des ateli
 
 **Livrable** : Schéma montrant connexions filaires vs. Wi-Fi
 
+
+## Diagramme
+
+```mermaid
+graph TB
+    Internet[Internet]
+    Router[Routeur Wi-Fi]
+    Switch[Switch 8 Ports]
+    PC1[PC Windows - Alice]
+    PC2[PC Windows - Ben]
+    NAS[Serveur NAS]
+    Printer[Imprimante Réseau]
+    
+    Internet -->|Ethernet| Router
+    Router -->|Ethernet| Switch
+    Router -->|Wi-Fi| PC1
+    Router -->|Wi-Fi| PC2
+    Switch -->|Ethernet| PC1
+    Switch -->|Ethernet| PC2
+    Switch -->|Ethernet| NAS
+    Switch -->|Ethernet| Printer
+```
+
 ### 1.2 Identification des Rôles
 
 | Question | Réponse |
@@ -113,7 +136,23 @@ ping [smartphone] # Tester la connectivité
 
 **Livrable** : Adresses IP + résultat `ping`
 
+Je créé un page web minimale avec node comme
+
+app.js + index.html
+
+Mon adresse :
+172.25.159.246
+
+Sur mon smartphone :
+172.25.159.246:3000
+
+
+
 ### 2.3 Intégration WSL 2
+
+## Vérifier configuration Windows
+
+![alt text](image-1.png)
 
 **Commandes WSL** :
 ```bash
@@ -122,6 +161,13 @@ ping [PC_IP]      # Ping vers Windows
 ping [Passerelle] # Ping vers smartphone
 ```
 
+![alt text](image-2.png)
+
+```bash
+ping 172.25.159.246 
+```
+![alt text](image-3.png)
+
 **Tests de connectivité à valider** :
 1. ✓ PC Windows → WSL
 2. ✓ WSL → PC Windows
@@ -129,15 +175,57 @@ ping [Passerelle] # Ping vers smartphone
 
 **Livrable** : IP du WSL + résultats des 3 tests
 
+
+## Configurer ngnix pour les ressources cdn
+
+![alt text](image-6.png)
 ---
 
 ## 🌐 Atelier 3 : CDN Statique Local
 
 **Objectif** : Déployer un **CDN local** pour améliorer la performance des ressources statiques.
 
+## Exemple sur Smartphone
+
+![alt text](image-4.png)
+
 ### 3.1 Conception et Sécurité du CDN
 
 **Tâche** : Dessiner l'architecture CDN (serveur source → caches → utilisateurs)
+
+
+```mermaid
+graph LR
+    Users["👥 Utilisateurs<br/>(Smartphones/PC)"]
+    Cache1["⚡ Cache 1<br/>(Région 1)"]
+    Cache2["⚡ Cache 2<br/>(Région 2)"]
+    Cache3["⚡ Cache 3<br/>(Région 3)"]
+    Origin["🖥️ Serveur Origine<br/>(Source)"]
+    
+    Users -->|Requête| Cache1
+    Users -->|Requête| Cache2
+    Users -->|Requête| Cache3
+    
+    Cache1 -->|Miss: Récupère| Origin
+    Cache2 -->|Miss: Récupère| Origin
+    Cache3 -->|Miss: Récupère| Origin
+    
+    Origin -->|Réplique contenu| Cache1
+    Origin -->|Réplique contenu| Cache2
+    Origin -->|Réplique contenu| Cache3
+    
+    Cache1 -->|Contenu en cache| Users
+    Cache2 -->|Contenu en cache| Users
+    Cache3 -->|Contenu en cache| Users
+    
+    style Origin fill:#ff6b6b
+    style Cache1 fill:#51cf66
+    style Cache2 fill:#51cf66
+    style Cache3 fill:#51cf66
+    style Users fill:#4dabf7
+```
+
+
 
 #### ❓ Question 1 : DMZ
 Faut-il placer les serveurs CDN (contenu public) en **DMZ** ?  
@@ -157,6 +245,10 @@ Citer et décrire **3 opérations essentielles** pour gérer le CDN :
 sudo apt update && sudo apt install nginx
 sudo systemctl start nginx
 ```
+### Test de la page par défaut ngnix
+
+![alt text](image-5.png)
+
 
 **Étape 2** : Créer contenu statique
 ```bash
