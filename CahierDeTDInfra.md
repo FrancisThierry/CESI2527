@@ -544,4 +544,29 @@ graph TD
 
 
 
+## Pour débugger :
+
+### Pour tester la base :
+Je teste la base de donnée
+```bash
+docker exec -it postgres_contact psql -U user -d contactsdb
+```
+Je tape la commande pour voir si une table existe
+```
+\dt
+```
+
+### Je lance le debug sur docker
+Avec l'id ou le nom du container
+```bash
+docker logs f5fac1160aba 
+```
+
+![alt text](image-7.png)
+La table n'existe pas. Je peux supprimer les volumes et en recréer.
+
+```bash
+docker-compose down -v
+
+docker-compose up -d --build
 ```
