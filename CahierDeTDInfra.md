@@ -434,3 +434,114 @@ iutiliser loadkeys fr sur centos pour clavier en français
 curl -sL https://rpm.nodesource.com/setup_20.x | sudo bash -
 
 sudo yum install nodejs
+
+# Alice et Ben se mettent au Container
+
+Ils installent docker desktop et vérifie l'installation:
+
+docker --version
+docker info
+
+Ils testent l'image officielle
+
+docker run hello-world
+
+il vérie la création d'une image avec 
+
+docker ps -a
+
+Ils affichent les images
+
+docker images
+
+C'est une excellente idée d'introduire **Docker** pour le déploiement de l'Atelier 5. Cela reflète les pratiques modernes de microservices et de conteneurisation.
+
+J'ai mis à jour l'Atelier 5 en intégrant l'utilisation de Docker (avec PHP, Nginx, et MySQL) dans les sections de conception et d'intégration.
+
+Voici l'**Atelier 5** complet et autonome au format Markdown.
+
+-----
+
+
+# 🚢 Atelier 5 : Création d'une API Météo Marine en Microservice (Conteneurisé)
+
+**Objectif :** Concevoir, modéliser et implémenter une API de météo marine sous forme de microservice, en utilisant **PHP** et **MySQL**, et en conteneurisant l'ensemble avec **Docker**. Ce service fournira des bulletins exploitables pour les applications de WeWeb.
+
+### 5.1 Conception de l'Architecture Microservice (Conteneurisée)
+
+* **Contexte :** Le déploiement de l'API s'effectuera via Docker et Docker Compose, garantissant l'isolation des dépendances (PHP, MySQL).
+* **Tâche :** Dessiner l'architecture de ce microservice, en incluant :
+    * Le client (application web/mobile de WeWeb)
+    * L'API Gateway (point d'entrée unique)
+    * Le Microservice "Météo Marine" (Conteneur PHP/Nginx)
+    * La base de données MySQL (Conteneur dédié)
+    * Une source de données externe (ex: API de météo marine publique simulée)
+
+```mermaid
+graph TD
+    Client[Application Client WeWeb] --> ApiGw[API Gateway]
+    
+    subgraph Environnement de Production (Docker)
+        ApiGw --> Proxy[Reverse Proxy / Load Balancer]
+        Proxy --> Microservice[Microservice Météo Marine (Conteneur PHP/Nginx)]
+        Microservice --> DB[(Base de Données MySQL (Conteneur))]
+        Microservice --> ExternalAPI[Source de Données Météo Externe Simulée]
+    end
+    
+    style Microservice fill:#f9f,stroke:#333,stroke-width:2px
+    style DB fill:#ccf,stroke:#333,stroke-width:2px
+````
+
+### 5.2 Modélisation de la Base de Données (MySQL)
+
+  * **Tâche :** Concevoir le schéma de la base de données MySQL pour stocker les bulletins météo marins.
+  * **Tables Minimales :**
+      * `ports` : Stocke les emplacements maritimes.
+      * `bulletins_meteo` : Stocke les prévisions (liées à un port).
+  * **Champs Suggerés :**
+
+| Table | Champs | Type / Contrainte | Rôle |
+| :--- | :--- | :--- | :--- |
+| **`ports`** | `id` | INT (PK, AI) | Identifiant unique |
+| | `nom_port` | VARCHAR(255) | Nom du port |
+| | `latitude`, `longitude` | DECIMAL(10, 6) | Position GPS |
+| **`bulletins_meteo`** | `id` | INT (PK, AI) | Identifiant unique |
+| | `port_id` | INT (FK vers `ports.id`) | Port concerné par le bulletin |
+| | `date_bulletin` | DATETIME | Date/Heure de la prévision |
+| | `force_vent` | INT | Force du vent (en Beaufort) |
+| | `etat_mer` | VARCHAR(100) | Description (Ex: Belle, agitée) |
+
+  * **Livrable :** Le schéma de la base de données (le tableau ci-dessus).
+
+### 5.3 Développement du Microservice (PHP)
+
+  * **Tâche :** Décrire les principales étapes pour créer la logique métier en PHP.
+  * **Endpoints Définis (API REST) :**
+
+| Méthode | Endpoint | Description |
+| :---: | :--- | :--- |
+| `GET` | `/api/meteo/ports` | Liste tous les ports disponibles. |
+| `GET` | `/api/meteo/ports/{id_port}/bulletin` | Obtient le dernier bulletin pour un port spécifique. |
+
+  * **Logique Métier :** Le script PHP doit recevoir une requête HTTP, interroger la base de données MySQL, et formater le résultat en **JSON** avant de le renvoyer.
+  * **Livrable :** Une description textuelle détaillée des étapes de développement et des endpoints définis.
+
+### 5.4 Déploiement et Intégration (Docker)
+
+  * **Tâche :** Expliquer les composants nécessaires pour conteneuriser le service (Docker Compose).
+  * **Composants Docker :**
+    1.  **Service `app` :** Conteneur basé sur PHP-FPM, contenant le code de l'API.
+    2.  **Service `web` :** Conteneur basé sur Nginx, servant de reverse proxy pour `app` et gérant les requêtes HTTP.
+    3.  **Service `db` :** Conteneur basé sur MySQL, pour la persistance des données.
+  * **Tâche :** Décrire comment le service `app` et le service `db` communiqueront (via le réseau interne Docker).
+  * **Test d'Accès :**
+      * Démarrer les services avec `docker compose up -d`.
+      * Tester l'accès à l'API depuis le PC hôte ou le WSL en utilisant `curl` :
+          * `curl http://localhost:[PORT_NGINX]/api/meteo/ports`
+  * **Livrable :** L'explication des services Docker nécessaires et l'exemple de commande de test `curl`.
+
+-----
+
+
+
+```
