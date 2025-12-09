@@ -13,5 +13,11 @@ https://www.virtualbox.org/
 https://github.com/jesseduffield/lazydocker
 
 ## Coffre fort
-Vault Warden
-Keeper
+Site Officiel Keeper Security (Plans Personnels et Famille)	https://www.keepersecurity.com/fr_FR/personal.html
+
+Solutions pour Entreprises (KeeperPAM, etc.)	https://www.keepersecurity.com/fr_FR/team-password-manager/
+
+Extension Navigateur Chrome (pour le gestionnaire Keeper)	https://chromewebstore.google.com/detail/keeper%C2%AE-password-manager/bfogiafebfohielmmehodmfbbebbbpei?hl=fr
+
+## Exemple api pour render
+https://github.com/FrancisThierry/APIDeauville
