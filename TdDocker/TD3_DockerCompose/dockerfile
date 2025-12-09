@@ -1,0 +1,14 @@
+# Utiliser une image Node.js de base
+FROM node:18-alpine
+
+# Définir le répertoire de travail
+WORKDIR /usr/src/app
+
+# Copier le fichier d'application
+COPY app/server.js .
+
+# Laisser le port 8080 exposé (pour documentation)
+EXPOSE 8080
+
+# Commande pour démarrer l'application
+CMD [ "node", "server.js" ]

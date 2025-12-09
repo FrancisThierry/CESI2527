@@ -1,0 +1,15 @@
+# ÉTAPE 1: Choisir l'image de base
+# Utiliser une image Node.js officielle (version 20 en mode slim/allégée pour réduire la taille)
+FROM node:20-slim
+
+# ÉTAPE 2: Définir le répertoire de travail dans le conteneur
+# Tous les chemins suivants seront relatifs à ce répertoire
+WORKDIR /usr/src/app
+
+# ÉTAPE 3: Copier les fichiers de l'application
+# Copier uniquement le fichier principal de l'application
+COPY app.js .
+
+# ÉTAPE 4: Définir la commande à exécuter au démarrage du conteneur
+# Cette commande démarrera l'application Node.js
+CMD [ "node", "app.js" ]

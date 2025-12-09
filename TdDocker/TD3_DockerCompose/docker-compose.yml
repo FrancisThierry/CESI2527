@@ -1,0 +1,23 @@
+version: '3.8' # Version de la spécification Compose
+
+services:
+  # Service 1: L'application Web (construite localement)
+  web:
+    build: . # Indique à Compose de construire l'image en utilisant le Dockerfile dans le répertoire actuel
+    ports:
+      - "8080:8080" # Mappe le port 8080 de l'hôte au port 8080 du conteneur
+    depends_on:
+      - redis # Assure que le service 'redis' est démarré avant 'web'
+    networks:
+      - app-network
+
+  # Service 2: La base de données Redis (image existante)
+  redis:
+    image: redis:6-alpine # Utilise une image officielle disponible sur Docker Hub
+    networks:
+      - app-network
+
+# Définition des réseaux
+networks:
+  app-network:
+    driver: bridge # Crée un réseau interne pour que les services communiquent entre eux
