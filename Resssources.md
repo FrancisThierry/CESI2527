@@ -21,3 +21,8 @@ Extension Navigateur Chrome (pour le gestionnaire Keeper)	https://chromewebstore
 
 ## Exemple api pour render
 https://github.com/FrancisThierry/APIDeauville
+
+## Installer Ansible
+sudo apt install ansible
+ ou avec
+pip pip3 install ansible
