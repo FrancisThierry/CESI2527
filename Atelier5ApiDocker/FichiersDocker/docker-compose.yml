@@ -1,0 +1,11 @@
+services:
+  alpine1:
+    build: .
+    container_name: alpine1
+    ports:
+      - "2222:22"
+  alpine2:
+    build: .
+    container_name: alpine2
+    ports:
+      - "2223:22"

@@ -1,0 +1,11 @@
+FROM alpine:latest
+
+RUN apk update && \
+    apk add --no-cache openssh python3 py3-pip && \
+    echo 'root:root' | chpasswd && \
+    mkdir /root/.ssh && \
+    ssh-keygen -A && \
+    sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config && \
+    echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
+
+CMD ["/usr/sbin/sshd", "-D"]

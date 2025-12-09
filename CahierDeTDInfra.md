@@ -569,4 +569,15 @@ La table n'existe pas. Je peux supprimer les volumes et en recréer.
 docker-compose down -v
 
 docker-compose up -d --build
-```
+
+## Quelques bonnes pratiques
+
+* Utiliser les volumes pour persister les données au delà du cycle de vie du conteneur.
+* Utiliser les networks pour isoler les conteneurs.
+* Utiliser les labels pour baliser les conteneurs.
+* Utiliser les ports pour exposer les services aux réseaux.
+* Utiliser les dépendances pour gérer les dépendances du conteneur.
+* Utiliser les buildargs pour optimiser l'image du conteneur.
+* Utiliser les environnements pour gérer les variables d'environnement.
+* Utiliser les healthcheck pour vérifier l'état du conteneur.
+

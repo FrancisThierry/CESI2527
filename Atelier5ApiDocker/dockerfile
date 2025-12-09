@@ -1,0 +1,23 @@
+# Utilise l'image PHP 8.2 avec Apache comme base
+FROM php:8.2-apache
+
+# Installe les dépendances nécessaires et l'extension MySQLi
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libonig-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Active l'extension MySQLi (pilote pour MySQL)
+# Note: mysqli est inclus par défaut dans les images php-apache mais doit être activé
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+# Active les modules Apache rewrite (utile pour les URL propres/simples)
+RUN a2enmod rewrite
+
+# Configure le répertoire de travail
+WORKDIR /var/www/html
+
+# Le serveur web écoute sur le port 80 par défaut (géré par l'image de base)
+EXPOSE 80
+
+# La commande par défaut de l'image de base est suffisante (apache2-foreground)

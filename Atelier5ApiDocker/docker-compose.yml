@@ -1,0 +1,39 @@
+
+services:
+  # Service de Base de Données (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: meteo_mysql
+    # NOUVEAU : Charge les variables d'environnement à partir du fichier
+    env_file:
+      - .env
+    environment:
+      # MySQL nécessite ces variables préfixées, elles sont lues depuis .env
+      MYSQL_ROOT_PASSWORD: root_password # Peut rester fixe ou être défini dans .env
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db_data:/var/lib/mysql
+
+  # Service API (PHP/Apache)
+  app:
+    container_name: meteo_api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # NOUVEAU : Charge les variables d'environnement à partir du fichier
+    env_file:
+      - .env
+    volumes:
+      - ./api:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
