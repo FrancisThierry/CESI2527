@@ -29,3 +29,10 @@ pip pip3 install ansible
 
 ## Commande Ansible
 ansible-playbook -i inventory.ini nodeInstalled.yml
+
+## Supression Warning sur alpine1
+ajouter à l'inventaire :
+```bash
+[all]
+alpine1 ansible_python_interpreter=/usr/bin/python3
+```
