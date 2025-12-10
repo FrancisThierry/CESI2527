@@ -630,3 +630,60 @@ D'accord. Voici le texte des 20 exercices (TD) demandés, basés sur les modules
 
 19. **Ajout de Ligne (alpine1) :** S'assurer que la ligne `ClientAliveInterval 300` est présente dans le fichier de configuration SSH `/etc/ssh/sshd_config` sur **`alpine1`**.
 20. **Gestion de Bloc (alpine2) :** Ajouter un **bloc** de configuration (`blockinfile`) à la fin du fichier `/etc/hosts` sur **`alpine2`** pour y insérer l'adresse IP de `alpine1`, entouré de marqueurs.
+
+## 📱 Atelier 7 : Déploiement avec Ansible
+
+
+
+-----
+
+## 📝 Travail Dirigé : Environnement de Recette Minimaliste avec Docker et Ansible
+
+### **Objectif Général**
+
+Mettre en place un environnement de recette basé sur un conteneur Alpine en utilisant Ansible pour automatiser le déploiement et le redéploiement d'un code source depuis un dépôt GitHub.
+
+Dans le header html par exemple indiquer la version du programme et la mention en recette si on est sur la machine alpine3
+
+-----
+
+### **Phase 1 : Préparation de l'Hôte de Recette (Docker)**
+
+| Exercice | Description | Livrable Attendu |
+| :--- | :--- | :--- |
+| **1.1** | Créer un fichier `Dockerfile` basé sur `alpine:3`. Ce fichier doit inclure l'installation des dépendances nécessaires pour permettre à Ansible de fonctionner (ex: Python) et l'installation de `git`. | Fichier `Dockerfile` |
+| **1.2** | Construire l'image Docker à partir du `Dockerfile` (nommez-la `recette-alpine`). | Image Docker `recette-alpine` construite localement |
+| **1.3** | Lancer un conteneur en arrière-plan à partir de cette image (nommez-le `recette_hote`). | Conteneur `recette_hote` en cours d'exécution |
+
+-----
+
+### **Phase 2 : Création du Rôle Ansible**
+
+| Exercice | Description | Livrable Attendu |
+| :--- | :--- | :--- |
+| **2.1** | Initialiser la structure d'un nouveau rôle Ansible. Nommez ce rôle `deploy_recette`. | Répertoire `deploy_recette/` avec la structure standard (`tasks`, `handlers`, etc.) |
+| **2.2** | Rédiger les tâches (`tasks/main.yml`) du rôle `deploy_recette`. Ces tâches doivent : \<ul\>\<li\>Installer un serveur web (ex: Nginx).\</li\>\<li\>S'assurer que le répertoire de destination (`/opt/app_recette`) existe.\</li\>\<li\>Utiliser le module adéquat pour cloner le code source depuis un dépôt GitHub spécifié.\</li\>\<li\>Configurer le serveur web pour servir les fichiers depuis ce répertoire.\</li\>\<li\>S'assurer que le serveur web est démarré.\</li\>\</ul\> | Fichier `deploy_recette/tasks/main.yml` rédigé |
+| **2.3** | Rédiger les *handlers* (`handlers/main.yml`) nécessaires. Un *handler* doit être défini pour redémarrer le serveur web lorsque le code est mis à jour ou que sa configuration change. | Fichier `deploy_recette/handlers/main.yml` rédigé |
+
+-----
+
+### **Phase 3 : Exécution du Déploiement**
+
+| Exercice | Description | Livrable Attendu |
+| :--- | :--- | :--- |
+| **3.1** | Créer un fichier d'inventaire (`inventory.ini`) pointant vers le conteneur Docker (`recette_hote`). Utiliser le type de connexion `docker` pour que Ansible puisse interagir avec le conteneur. | Fichier `inventory.ini` |
+| **3.2** | Créer le *playbook* principal (`deploy.yml`) qui exécute le rôle `deploy_recette` sur les hôtes définis dans l'inventaire. | Fichier `deploy.yml` |
+| **3.3** | Exécuter le *playbook* pour le **premier déploiement**. Analyser le résultat (toutes les tâches devraient être marquées comme `CHANGED`). | Sortie console de l'exécution d'Ansible |
+
+-----
+
+### **Phase 4 : Redéploiement et Idempotence**
+
+| Exercice | Description | Livrable Attendu |
+| :--- | :--- | :--- |
+| **4.1** | Simuler une modification : effectuer un changement dans le code source de l'application sur GitHub, puis *commiter* et *pusher* cette modification. | Dépôt GitHub mis à jour |
+| **4.2** | Exécuter le *playbook* une **seconde fois** (redéploiement) sans aucune modification du côté Ansible. | Sortie console de l'exécution d'Ansible |
+
+
+-----
+
