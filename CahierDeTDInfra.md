@@ -454,11 +454,6 @@ Ils affichent les images
 
 docker images
 
-C'est une excellente idée d'introduire **Docker** pour le déploiement de l'Atelier 5. Cela reflète les pratiques modernes de microservices et de conteneurisation.
-
-J'ai mis à jour l'Atelier 5 en intégrant l'utilisation de Docker (avec PHP, Nginx, et MySQL) dans les sections de conception et d'intégration.
-
-Voici l'**Atelier 5** complet et autonome au format Markdown.
 
 -----
 
