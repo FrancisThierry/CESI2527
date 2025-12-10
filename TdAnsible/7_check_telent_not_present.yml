@@ -1,0 +1,8 @@
+- name: Assurer que le paquet telnet est absent sur alpine2
+  hosts: alpine2
+  become: true
+  tasks:
+    - name: Désinstaller le paquet telnet
+      apk:
+        name: telnet
+        state: absent

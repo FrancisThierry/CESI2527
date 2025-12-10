@@ -1,0 +1,10 @@
+---
+- name: S'assurer que le paquet vim est installé sur alpine1
+  hosts: alpine1
+  become: true  # Nécessaire pour installer des paquets système
+  tasks:
+    - name: Installer le paquet vim via le gestionnaire de paquets APK
+      ansible.builtin.apk:
+        name: vim
+        state: present  # S'assure que le paquet est installé. Si déjà présent, Ansible ne fait rien (idempotence).
+        update_cache: yes # Mettre à jour le cache du dépôt avant l'installation, si nécessaire.

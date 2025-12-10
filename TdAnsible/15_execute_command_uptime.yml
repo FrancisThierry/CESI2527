@@ -1,0 +1,14 @@
+---
+- name: Exécuter uptime et ignorer les erreurs sur alpine1
+  hosts: alpine1
+  become: false # uptime ne nécessite généralement pas les privilèges root
+  tasks:
+    - name: Exécuter la commande 'uptime'
+      ansible.builtin.command: uptime
+      register: uptime_result # Enregistre le résultat de la commande
+      ignore_errors: true     # L'élément clé : si la commande échoue, Ansible continue.
+      
+    - name: Afficher le résultat (même s'il y a eu une erreur)
+      ansible.builtin.debug:
+        msg: "Statut d'exécution: {{ uptime_result.rc }}. Sortie: {{ uptime_result.stdout | default('N/A') }}"
+      when: uptime_result is defined

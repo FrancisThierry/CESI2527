@@ -1,0 +1,37 @@
+---
+- name: Configuration SSHD et redémarrage conditionnel sur alpine1
+  hosts: alpine1
+  become: true 
+  
+  tasks:
+    # Tâche 1 : Ajout/Modification de la ligne de configuration
+    - name: T1 - Ajouter ou mettre à jour ClientAliveInterval à 300 secondes
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config      # <-- CORRECTION 1 : 'path' est requis
+        line: "ClientAliveInterval 300"
+        regexp: '^#?ClientAliveInterval\s+'
+        state: present
+      register: sshd_config_status
+      notify: Redémarrer sshd 
+
+    # 2. Debug : Afficher si la configuration a été modifiée
+    # CORRECTION 2 : L'indentation de tous les '- name:' est cruciale.
+    - name: Configuration SSHD modifiée
+      ansible.builtin.debug:
+        msg: "✅ La ligne 'ClientAliveInterval 300' a été ajoutée/modifiée. Redémarrage notifié."
+      when: sshd_config_status.changed
+
+    # 3. Debug : Afficher si la configuration n'a pas été modifiée
+    - name: Configuration SSHD déjà correcte
+      ansible.builtin.debug:
+        msg: "☑️ La configuration SSHD était déjà conforme, pas de redémarrage nécessaire."
+      when: not sshd_config_status.changed
+      
+  handlers:
+    # CORRECTION 3 : Résolution de l'échec de service (image_fc9edb.png)
+    # Dans Alpine Docker, on ne peut pas utiliser ansible.builtin.service.
+    - name: Redémarrer sshd
+      # Utilisation de la méthode HUP pour recharger la configuration SSHD
+      ansible.builtin.command: kill -HUP $(pidof sshd)
+      ignore_errors: true
+      changed_when: true

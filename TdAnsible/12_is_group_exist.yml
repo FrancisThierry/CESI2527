@@ -1,0 +1,24 @@
+---
+- name: S'assurer que le groupe admins_locaux existe sur alpine2
+  hosts: alpine2
+  become: true
+  tasks:
+    # Tâche 1 : Créer ou vérifier l'existence du groupe
+    - name: Créer le groupe 'admins_locaux' s'il n'existe pas
+      ansible.builtin.group:
+        name: admins_locaux
+        state: present
+      register: group_creation_status # Enregistre le résultat de cette tâche dans la variable
+
+    # Tâche 2 : Afficher le message si le groupe a été créé (CHANGED)
+    - name: Message - Groupe créé
+      ansible.builtin.debug:
+        msg: "✅ Le groupe 'admins_locaux' a été créé sur {{ inventory_hostname }}."
+      when: group_creation_status.changed
+
+    # Tâche 3 : Afficher le message si le groupe existait déjà (OK)
+    - name: Message - Groupe existait déjà
+      ansible.builtin.debug:
+        msg: "☑️ Le groupe 'admins_locaux' existait déjà sur {{ inventory_hostname }}."
+      # CORRECTION : On vérifie simplement que la tâche n'a pas changé
+      when: not group_creation_status.changed

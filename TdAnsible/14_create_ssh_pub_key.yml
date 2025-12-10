@@ -1,0 +1,11 @@
+---
+- name: Ajouter la clé publique SSH à l'utilisateur root sur tous les hôtes
+  hosts: all              # Cible tous les hôtes de votre inventaire
+  become: true            # Permet d'écrire dans le répertoire /root/.ssh
+  tasks:
+    - name: Ajouter la clé sysadmin.pub au fichier /root/.ssh/authorized_keys
+      ansible.builtin.authorized_key:
+        user: root                    # L'utilisateur cible (ici, root)
+        state: present                # Assure que la clé est présente
+        key: "{{ lookup('file', 'files/sysadmin.pub') }}" # Lit le contenu du fichier local
+        path: /root/.ssh/authorized_keys # Spécifie explicitement le chemin du fichier (bonne pratique)

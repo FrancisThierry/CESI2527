@@ -1,0 +1,31 @@
+---
+- name: Ajout de l'utilisateur deployer au groupe docker et vérification du groupe
+  hosts: alpine2
+  become: true 
+  tasks:
+    # 1. Tâche : Assurer que le groupe 'docker' existe (ou le créer)
+    - name: Vérifier et créer le groupe 'docker' s'il n'existe pas
+      ansible.builtin.group:
+        name: docker
+        state: present
+      register: docker_group_status # Enregistre l'état de la tâche
+
+    # 2. Message : Afficher si le groupe a été créé
+    - name: Message - Groupe 'docker' créé
+      ansible.builtin.debug:
+        msg: "✅ Le groupe 'docker' a été créé sur {{ inventory_hostname }}."
+      when: docker_group_status.changed
+
+    # 3. Message : Afficher si le groupe existait déjà
+    - name: Message - Groupe 'docker' existait déjà
+      ansible.builtin.debug:
+        msg: "☑️ Le groupe 'docker' existait déjà sur {{ inventory_hostname }}."
+      when: not docker_group_status.changed
+
+    # 4. Tâche : Ajouter l'utilisateur 'deployer' au groupe 'docker'
+    - name: Ajouter l'utilisateur 'deployer' au groupe secondaire 'docker'
+      ansible.builtin.user:
+        name: deployer      
+        groups: docker      
+        append: yes         
+        state: present

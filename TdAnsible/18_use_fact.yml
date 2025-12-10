@@ -1,0 +1,15 @@
+---
+- name: Définition de la variable dynamique 'distro' sur tous les hôtes
+  hosts: all
+  become: false # Aucun privilège root n'est nécessaire pour définir une variable
+  
+  tasks:
+    # 1. Tâche pour définir la variable 'distro'
+    - name: Définir la variable 'distro' basée sur ansible_distribution
+      ansible.builtin.set_fact:
+        distro: "{{ ansible_distribution }}"
+
+    # 2. Tâche de vérification (Optionnelle)
+    - name: Afficher la variable dynamique 'distro'
+      ansible.builtin.debug:
+        msg: "La distribution détectée pour {{ inventory_hostname }} est: {{ distro }}"

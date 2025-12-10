@@ -1,0 +1,9 @@
+---
+- name: Suppression d'un ancien fichier de journal sur alpine2
+  hosts: alpine2
+  become: true # Nécessaire pour supprimer des fichiers dans un répertoire système comme /var/log/
+  tasks:
+    - name: Supprimer /var/log/app.old si le fichier existe
+      ansible.builtin.file:
+        path: /var/log/app.old
+        state: absent # Assure que le chemin spécifié n'existe pas.

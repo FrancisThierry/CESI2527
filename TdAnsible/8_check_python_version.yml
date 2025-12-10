@@ -1,0 +1,11 @@
+---
+- name: S'assurer que python3 est installé à la dernière version sur tous les hôtes
+  hosts: all              # Cible tous les hôtes de votre inventaire
+  become: true            # Nécessaire pour installer des paquets système
+  tasks:
+    - name: Installer la dernière version de python3
+      ansible.builtin.package:
+        name: python3     # Le nom du paquet est généralement "python3" sur Alpine/Debian
+        state: latest     # Garantit que le paquet est installé et mis à jour à la dernière version disponible
+        update_cache: yes # Mise à jour du cache local avant l'installation/mise à jour
+      #

@@ -1,0 +1,17 @@
+---
+- name: Affichage de la variable espace_disque_alpine2 sur alpine2
+  hosts: alpine2
+  become: false
+  tasks:
+    # Tâche 1 : Exécuter la commande et enregistrer le résultat
+    - name: Exécuter df -h / et enregistrer la sortie
+      ansible.builtin.command: df -h /
+      register: espace_disque_alpine2
+      changed_when: false # Ne doit pas être marqué comme ayant changé
+
+    # Tâche 2 : Afficher le contenu de la variable enregistrée
+    - name: Afficher le contenu de espace_disque_alpine2.stdout
+      ansible.builtin.debug:
+        msg: |
+          --- Espace Disque / ({{ inventory_hostname }}) ---
+          {{ espace_disque_alpine2.stdout }}

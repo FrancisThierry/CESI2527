@@ -1,0 +1,13 @@
+---
+- name: Exécuter df -h et enregistrer le résultat sur alpine2
+  hosts: alpine2
+  become: false # df -h ne nécessite pas les privilèges root
+  tasks:
+    - name: Exécuter df -h / et enregistrer la sortie dans espace_disque_alpine2
+      ansible.builtin.command: df -h /
+      register: espace_disque_alpine2 # Le résultat complet est enregistré ici
+      changed_when: false             # Cette tâche ne modifie pas l'état du système
+
+    - name: Afficher le contenu de la variable (pour vérification)
+      ansible.builtin.debug:
+        msg: "Espace disque de / sur alpine2:\n{{ espace_disque_alpine2.stdout }}"

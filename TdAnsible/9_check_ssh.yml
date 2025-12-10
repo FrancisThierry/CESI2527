@@ -1,0 +1,29 @@
+---
+- name: Démarrer le service SSHD manuellement sur alpine1 (Contexte Docker/Alpine)
+  hosts: alpine1
+  become: true # Nécessaire pour exécuter des commandes système
+  
+  tasks:
+    # Cette tâche utilise 'command' au lieu de 'shell' car elle est plus simple et n'a pas besoin de fonctionnalités shell.
+    # Elle utilise le chemin complet vers l'exécutable SSHD.
+    - name: Démarrer sshd manuellement (Si non démarré par Dockerfile)
+      ansible.builtin.command: /usr/sbin/sshd
+      # Utiliser 'when' pour s'assurer que cette méthode spécifique à Alpine/conteneur n'est appliquée que là où c'est nécessaire.
+      when: ansible_facts['os_family'] == 'Alpine'
+      # 
+      
+    # NOTE IMPORTANTE :
+    # Contrairement au module 'service', le module 'command' n'est pas idempotent. 
+    # Si la commande est exécutée plusieurs fois, elle tentera de redémarrer SSHD à chaque fois.
+    # Pour rendre cela plus idempotent, on peut ajouter une vérification préalable :
+    
+    - name: Vérifier si sshd est déjà en cours d'exécution
+      ansible.builtin.command: "pgrep sshd"
+      register: sshd_status
+      ignore_errors: true # Ne pas échouer si pgrep ne trouve rien
+      changed_when: false # Cette tâche ne change jamais l'état du système
+
+    - name: Démarrer sshd seulement si non en cours d'exécution
+      ansible.builtin.command: /usr/sbin/sshd
+      # Démarrer SSHD uniquement si la commande 'pgrep' a échoué (sshd_status.rc != 0)
+      when: sshd_status.rc != 0 and ansible_facts['os_family'] == 'Alpine'

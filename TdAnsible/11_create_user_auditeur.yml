@@ -1,0 +1,13 @@
+---
+- name: Créer l'utilisateur auditeur avec un shell restreint sur alpine1
+  hosts: alpine1
+  become: true # Nécessaire pour gérer les utilisateurs et groupes système
+  tasks:
+    - name: Créer l'utilisateur 'auditeur' avec /bin/false comme shell de connexion
+      ansible.builtin.user:
+        name: auditeur
+        shell: /bin/false # Empêche la connexion interactive
+        state: present    # S'assure que l'utilisateur existe
+        # (Optionnel) Vous pouvez également ajouter d'autres paramètres comme:
+        # system: yes     # Pour un utilisateur système
+        # comment: "Compte d'audit non-interactif"

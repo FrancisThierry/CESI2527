@@ -1,0 +1,44 @@
+---
+- name: Déploiement Nginx et gestion du service sur alpine2 (CORRIGÉ pour Docker/Alpine)
+  hosts: alpine2
+  become: true # Nécessaire pour écrire dans /etc et gérer les services
+
+  # --- DÉFINITION DES VARIABLES ---
+  vars:
+    server_hostname: "web.alpine2.lan" # Variable pour le nom du serveur Nginx
+    http_port: 80                      # Variable pour le port d'écoute
+    
+  tasks:
+    # Tâche 0 : S'assurer que le paquet nginx est installé
+    - name: Assurer que le paquet nginx est présent sur alpine2
+      ansible.builtin.package:
+        name: nginx
+        state: present
+        update_cache: yes
+        
+    # Tâche 1 : Copier/Templatiser le fichier de configuration Nginx
+    - name: Déployer le fichier de configuration /etc/nginx/nginx.conf
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+      # >>> Déclenche le handler si le fichier change <<<
+      notify: 
+        - Redémarrer nginx
+
+    # Tâche 2 : Démarrer le démon Nginx manuellement
+    # CORRECTION : Utilisation de 'command' car le module 'service' échoue dans ce type de conteneur.
+    - name: Démarrer le démon Nginx manuellement si nécessaire
+      ansible.builtin.command: nginx
+      # 'ignore_errors: true' permet d'éviter un FAILED si Nginx est déjà démarré
+      ignore_errors: true
+      # NOTE : Dans un conteneur, l'état 'enabled: yes' n'est pas applicable et est omis.
+
+  handlers:
+    # Handler : Tâche exécutée SEULEMENT si une tâche a fait un "notify"
+    # CORRECTION : Remplacement du module 'service' par la commande de rechargement
+    - name: Redémarrer nginx
+      ansible.builtin.command: nginx -s reload
+      # Cette commande est beaucoup plus rapide que 'state: restarted' pour appliquer une nouvelle configuration

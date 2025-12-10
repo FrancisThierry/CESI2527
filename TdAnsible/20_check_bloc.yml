@@ -1,0 +1,23 @@
+---
+- name: 1/2 - Collecte des facts sur tous les hôtes
+  hosts: all
+  gather_facts: yes
+
+- name: 2/2 - Configuration du fichier hosts sur alpine2
+  hosts: alpine2
+  become: yes
+  vars:
+    # Récupérer l'IP de alpine1 depuis les facts collectés précédemment
+    alpine1_ip: "{{ hostvars['alpine1']['ansible_default_ipv4']['address'] }}"
+
+  tasks:
+    - name:  Insérer l'entrée pour alpine1 dans /etc/hosts
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        block: |
+          # DÉBUT - Entrée hôte WeWeb (alpine1)
+          {{ alpine1_ip }} alpine1.weweb.lan alpine1
+          # FIN - Entrée hôte WeWeb (alpine1)
+        insertafter: EOF  # Ajoute le bloc à la fin du fichier
+        marker: "# {mark} ANSIBLE MANAGED BLOCK pour alpine1"
+        backup: yes
