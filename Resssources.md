@@ -26,3 +26,6 @@ https://github.com/FrancisThierry/APIDeauville
 sudo apt install ansible
  ou avec
 pip pip3 install ansible
+
+## Commande Ansible
+ansible-playbook -i inventory.ini nodeInstalled.yml
