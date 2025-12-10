@@ -1,0 +1,24 @@
+---
+- name: Déploiement du fichier de configuration app.conf sur alpine1 (Variable dans l'Inventaire)
+  hosts: alpine1
+  become: true
+  
+  tasks:
+    # 1. Tâche pour s'assurer que le répertoire de destination existe
+    - name: Créer le répertoire /etc/app si nécessaire
+      ansible.builtin.file:
+        path: /etc/app
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    # 2. Tâche principale : Déploiement du template
+    - name: Générer le fichier /etc/app/app.conf à partir du template
+      ansible.builtin.template:
+        src: templates/app.conf.j2
+        dest: /etc/app/app.conf
+        owner: root
+        group: root
+        mode: '0644'
+        # La variable {{ app_version }} est automatiquement récupérée de l'inventaire

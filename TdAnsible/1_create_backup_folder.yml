@@ -1,0 +1,27 @@
+---
+- name: Configuration complète du répertoire de sauvegarde sur alpine1
+  hosts: alpine1
+  become: true
+  tasks:
+    # 1. Tâche pour s'assurer que le groupe 'ops' existe
+    - name: Vérifier et créer le groupe 'ops' s'il n'existe pas
+      ansible.builtin.group:
+        name: ops
+        state: present
+
+    # 2. Tâche NÉCESSAIRE pour s'assurer que l'utilisateur 'ops' existe
+    #    et qu'il fait partie du groupe 'ops'.
+    - name: Vérifier et créer l'utilisateur 'ops' s'il n'existe pas
+      ansible.builtin.user:
+        name: ops
+        state: present
+        group: ops # Assigner l'utilisateur au groupe primaire 'ops'
+
+    # 3. Tâche pour créer le répertoire avec la propriété correcte
+    - name: Créer le répertoire /opt/config_backup avec les permissions et la propriété correctes
+      ansible.builtin.file:
+        path: /opt/config_backup
+        state: directory
+        owner: ops # L'utilisateur 'ops' est maintenant garanti d'exister
+        group: ops
+        mode: '0750'

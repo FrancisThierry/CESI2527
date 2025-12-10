@@ -1,0 +1,14 @@
+---
+- name: Copie du script monitor.sh sur tous les hôtes
+  hosts: all              # Cible tous les hôtes définis dans votre inventaire
+  become: true            # Nécessaire pour copier des fichiers dans /usr/local/bin
+
+  tasks:
+    - name: Copier monitor.sh dans /usr/local/bin et le rendre exécutable
+      ansible.builtin.copy:
+        src: files/monitor.sh       # Chemin relatif au répertoire du Playbook sur la machine de contrôle
+        dest: /usr/local/bin/monitor.sh # Chemin de destination sur l'hôte distant
+        owner: root                 # Définir le propriétaire à 'root' (recommandé pour /usr/local/bin)
+        group: root                 # Définir le groupe à 'root'
+        mode: '0755'                # Rendre le fichier lisible et exécutable par tous (rwx r-x r-x)
+      #

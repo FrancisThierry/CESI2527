@@ -1,0 +1,11 @@
+---
+- name: Création du lien symbolique pour le Message du Jour (MOTD) sur alpine2
+  hosts: alpine2
+  become: true # Nécessaire pour effectuer des opérations dans le répertoire /etc
+  tasks:
+    - name: Créer le lien symbolique /etc/motd_link pointant vers /etc/motd
+      ansible.builtin.file:
+        path: /etc/motd_link   # Le chemin du lien symbolique à créer
+        src: /etc/motd         # Le fichier cible (source)
+        state: link            # Indique à Ansible de créer un lien symbolique
+        mode: '0777'           # (Optionnel) Définir les permissions du lien
