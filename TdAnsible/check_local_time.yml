@@ -1,0 +1,36 @@
+---
+- name: Standardiser la configuration de base (Timezone & Locale)
+  hosts: all
+  become: yes
+  tasks:
+
+    # 1. Mise à jour du cache APK et installation de tzdata (Résout les erreurs d'installation et "timezone not available")
+    - name: Pré-requis  Mettre à jour le cache APK et installer tzdata
+      ansible.builtin.apk:
+        name: tzdata
+        state: present
+        update_cache: yes
+      tags:
+        - packages
+
+    # 2. Définir le fuseau horaire (Résout l'erreur de l'exécutable manquant en utilisant le lien symbolique)
+    - name: Définir le fuseau horaire via lien symbolique vers {{ system_timezone }}
+      ansible.builtin.file:
+        # Utilisation de la variable Jinja2 définie dans l'inventaire
+        src: "/usr/share/zoneinfo/{{ system_timezone }}"
+        dest: /etc/localtime
+        state: link
+      tags:
+        - timezone
+
+    # 3. Configuration de la locale (Méthode recommandée pour les systèmes minimalistes comme Alpine)
+    # Remplacement des modules 'locale_gen' et 'localectl' qui posent problème.
+    - name: Définir la locale système par défaut (fr_FR.UTF-8)
+      ansible.builtin.lineinfile:
+        path: /etc/profile # Définit la variable au niveau global
+        line: 'export LANG="fr_FR.UTF-8"'
+        regexp: '^export LANG='
+        state: present
+        create: yes
+      tags:
+        - locale

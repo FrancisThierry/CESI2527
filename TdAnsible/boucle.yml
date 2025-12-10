@@ -1,0 +1,11 @@
+---
+- name: Exemple de playbook avec boucle
+  hosts: localhost
+  tasks:
+    - name: Afficher chaque élément de la liste
+      debug:
+        msg: "Item: {{ item }}"
+      loop:
+        - élément1
+        - élément2
+        - élément3

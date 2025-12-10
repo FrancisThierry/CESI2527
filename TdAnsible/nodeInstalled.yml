@@ -1,0 +1,12 @@
+---
+- name: Vérifier si Node.js est installé
+  hosts: alpine
+  tasks:
+    - name: Vérifier si Node.js est installé
+      command: "which node"
+      register: node_installed
+      ignore_errors: yes
+
+    - name: Afficher le statut de Node.js
+      debug:
+        msg: "Node.js : {{ 'installé' if node_installed.rc == 0 else 'non installé' }}"

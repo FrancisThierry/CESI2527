@@ -1,0 +1,16 @@
+---
+- name: Exemple de playbook avec condition
+  hosts: localhost
+  vars:
+    ma_variable: "Bonjour"
+  tasks:
+    - name: Afficher un message si la condition est remplie
+      debug:
+        msg: "La variable = Bonjour"
+      when: ma_variable == "Bonjour"
+
+    - name: Afficher un message si la condition n'est pas remplie
+      debug:
+        msg: "La variable ne contient pas Bonjour"
+      when: ma_variable != "Bonjour"
+

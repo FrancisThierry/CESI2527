@@ -1,0 +1,9 @@
+---
+- name: Exemple simple de playbook avec variable
+  hosts: localhost
+  vars:
+    message: "Bonjour, Ansible!"
+  tasks:
+    - name: Afficher le message
+      debug:
+        msg: "{{ message }}"

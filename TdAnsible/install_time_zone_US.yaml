@@ -1,0 +1,42 @@
+---
+- name: Configuration de base pour Alpine Linux - Fuseau Horaire US (America/New_York)
+  hosts: all
+  become: yes
+  tasks:
+
+    # 1. Mise à jour du cache APK
+    - name: Mettre à jour le cache du gestionnaire de paquets APK
+      ansible.builtin.apk:
+        update_cache: yes
+      tags:
+        - cache
+
+    # 2. Installation de tzdata
+    - name: Installer le paquet tzdata (base de données des fuseaux horaires)
+      ansible.builtin.apk:
+        name: tzdata
+        state: present
+      tags:
+        - packages
+
+    # 3. CHANGEMENT APPORTÉ ICI : Définir le fuseau horaire US (America/New_York)
+    - name: Définir le fuseau horaire America/New_York via lien symbolique
+      ansible.builtin.file:
+        # Source : le fichier du fuseau horaire US
+        src: /usr/share/zoneinfo/America/New_York
+        # Destination : l'emplacement standard du fuseau horaire système
+        dest: /etc/localtime
+        state: link # Crée un lien symbolique
+      tags:
+        - timezone
+
+    # 4. Configuration de la locale (Garde la locale fr_FR.UTF-8)
+    - name: Définir la locale système par défaut (fr_FR.UTF-8)
+      ansible.builtin.lineinfile:
+        path: /etc/profile
+        line: 'export LANG="fr_FR.UTF-8"'
+        regexp: '^export LANG='
+        state: present
+        create: yes
+      tags:
+        - locale

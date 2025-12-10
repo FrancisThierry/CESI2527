@@ -1,0 +1,18 @@
+---
+- name: Ajouter des utilisateurs sur les machines Alpine
+  hosts: alpine
+  become: true
+  vars:
+    users:
+      - name: Bob
+        machine: alpine1
+      - name: John
+        machine: alpine2
+
+  tasks:
+    - name: Créer un utilisateur
+      user:
+        name: "{{ item.name }}"
+        state: present
+      with_items: "{{ users }}"
+      when: inventory_hostname == item.machine

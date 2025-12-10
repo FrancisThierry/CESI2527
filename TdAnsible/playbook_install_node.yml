@@ -1,0 +1,32 @@
+---
+- name: Installer la dernière version de Node.js sur Alpine
+  hosts: alpine
+  become: yes
+
+  tasks:
+    - name: Installer les dépendances nécessaires
+      apk:
+        name: 
+          - python3
+          - curl
+        state: present
+
+    - name: Ajouter le dépôt communautaire (si nécessaire)
+      shell: |
+        echo "@community http://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
+      args:
+        creates: /etc/apk/repositories
+
+    - name: Mettre à jour les dépôts et installer Node.js
+      apk:
+        name: nodejs-current
+        state: present
+        update_cache: yes
+
+    - name: Vérifier l'installation de Node.js
+      command: "node --version"
+      register: node_version
+
+    - name: Afficher la version de Node.js installée
+      debug:
+        msg: "La version de Node.js installée est {{ node_version.stdout }}"

@@ -1,0 +1,21 @@
+---
+- name: Installer 7zip dernière version sur Alpine Linux
+  hosts: alpine1
+  become: yes
+  tasks:
+    - name: Mettre à jour les dépôts apk
+      apk:
+        update_cache: yes
+
+    - name: Installer p7zip
+      apk:
+        name: p7zip
+        state: latest
+
+    - name: Vérifier l'installation de 7zip
+      command: 7z
+      register: p7zip_version
+
+    - name: Afficher la version de 7zip
+      debug:
+        msg: "Version de 7zip installée : {{ p7zip_version.stdout }}"

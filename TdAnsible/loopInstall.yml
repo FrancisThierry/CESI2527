@@ -1,0 +1,18 @@
+---
+- name: Installer git, wget et tree sur alpine
+  hosts: alpine
+  become: yes
+
+  tasks:
+    - name: Mettre à jour les index des paquets APK
+      apk:
+        update_cache: yes
+
+    - name: Installer les paquets requis
+      apk:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - wget
+        - tree

@@ -1,0 +1,6 @@
+---
+- name: Exemple simple de playbook avec module ping
+  hosts: localhost
+  tasks:
+    - name: Vérifier la connectivité avec le module ping
+      ping:

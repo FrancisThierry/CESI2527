@@ -481,10 +481,10 @@ Voici l'**Atelier 5** complet et autonome au format Markdown.
 graph TD
     Client[Application Client WeWeb] --> ApiGw[API Gateway]
     
-    subgraph Environnement de Production (Docker)
+    subgraph Environnement de Production Docker
         ApiGw --> Proxy[Reverse Proxy / Load Balancer]
-        Proxy --> Microservice[Microservice Météo Marine (Conteneur PHP/Nginx)]
-        Microservice --> DB[(Base de Données MySQL (Conteneur))]
+        Proxy --> Microservice[Microservice Météo Marine Conteneur PHP/Nginx]
+        Microservice --> DB[Base de Données MySQL Conteneur]
         Microservice --> ExternalAPI[Source de Données Météo Externe Simulée]
     end
     
@@ -569,7 +569,7 @@ La table n'existe pas. Je peux supprimer les volumes et en recréer.
 docker-compose down -v
 
 docker-compose up -d --build
-
+```
 ## Quelques bonnes pratiques
 
 * Utiliser les volumes pour persister les données au delà du cycle de vie du conteneur.
@@ -581,3 +581,52 @@ docker-compose up -d --build
 * Utiliser les environnements pour gérer les variables d'environnement.
 * Utiliser les healthcheck pour vérifier l'état du conteneur.
 
+## 💻 Atelier 6 : Infrastructure as Code
+D'accord. Voici le texte des 20 exercices (TD) demandés, basés sur les modules **builtin** simples et ciblant spécifiquement `alpine1`, `alpine2`, ou les deux, incluant la vérification de la présence des paquets pour les installations/désinstallations.
+
+---
+
+## 🎯 20 Tâches Détaillées (TD) de Gestion Système
+
+### Gestion de Fichiers et de Répertoires
+
+1.  **Création de Répertoire (alpine1) :** Créer le répertoire `/opt/config_backup` sur **`alpine1`** uniquement. Assurer qu'il appartient à l'utilisateur `ops` et au groupe `ops`, avec des permissions `0750`.
+2.  **Lien Symbolique (alpine2) :** Créer un lien symbolique `/etc/motd_link` qui pointe vers `/etc/motd` sur **`alpine2`** uniquement.
+3.  **Copie de Fichier (Tous) :** Copier un script local nommé `monitor.sh` (situé dans `files/`) vers `/usr/local/bin/monitor.sh` sur **tous les hôtes**, en s'assurant qu'il est exécutable (`mode: '0755'`).
+4.  **Déploiement de Template (alpine1) :** Utiliser un template Jinja2 (`templates/app.conf.j2`) pour générer le fichier de configuration `/etc/app/app.conf` sur **`alpine1`**, en injectant la variable `${{ app_version }}`.
+5.  **Suppression de Fichier (alpine2) :** Supprimer un ancien fichier de journal `/var/log/app.old` si celui-ci existe sur **`alpine2`**.
+
+---
+
+### Gestion de Paquets et Services (Présence Assurée)
+
+6.  **Installation de Paquet (alpine1) :** Assurer que le paquet `vim` est **présent** sur **`alpine1`** uniquement.
+7.  **Désinstallation de Paquet (alpine2) :** Assurer que le paquet `telnet` est **absent** (désinstallé) sur **`alpine2`** uniquement.
+8.  **Installation de Paquet (Tous) :** Assurer que le paquet `python3` est installé avec la **dernière version** disponible sur **tous les hôtes**.
+9.  **Démarrage de Service (alpine1) :** Démarrer le service `ssh` et s'assurer qu'il est **activé** au démarrage du système sur **`alpine1`**.
+10. **Redémarrage Conditionnel (alpine2) :** Redémarrer le service `nginx` (en utilisant un **Handler**) sur **`alpine2`** uniquement si le fichier de configuration a été modifié.
+
+---
+
+### Gestion d'Utilisateurs et de Groupes
+
+11. **Création d'Utilisateur (alpine1) :** Créer l'utilisateur `auditeur` avec un shell `/bin/false` sur **`alpine1`**.
+12. **Gestion de Groupe (alpine2) :** Assurer que le groupe `admins_locaux` existe sur **`alpine2`**.
+13. **Ajout à un Groupe (alpine2) :** Ajouter l'utilisateur `deployer` au groupe secondaire `docker` sur **`alpine2`**.
+14. **Clé SSH (Tous) :** S'assurer que la clé publique SSH stockée dans `files/sysadmin.pub` est ajoutée au compte `root` sur **tous les hôtes**.
+
+---
+
+### Logique et Exécution de Commandes
+
+15. **Exécution de Commande Simple (alpine1) :** Exécuter la commande `uptime` et ignorer les erreurs potentielles sur **`alpine1`**.
+16. **Enregistrement de Sortie (alpine2) :** Exécuter la commande `df -h /` et **enregistrer** le résultat dans une variable nommée `espace_disque_alpine2` sur **`alpine2`**.
+17. **Affichage de Variable (alpine2) :** Utiliser `ansible.builtin.debug` pour **afficher** le contenu de la variable `espace_disque_alpine2` enregistrée précédemment, en ciblant **`alpine2`**.
+18. **Définition de Fact Dynamique (Tous) :** Utiliser `ansible.builtin.set_fact` pour définir une variable `distro` égale au nom de la distribution Linux (`ansible_distribution`) sur **tous les hôtes**.
+
+---
+
+### Manipulation de Fichiers (Lignes et Blocs)
+
+19. **Ajout de Ligne (alpine1) :** S'assurer que la ligne `ClientAliveInterval 300` est présente dans le fichier de configuration SSH `/etc/ssh/sshd_config` sur **`alpine1`**.
+20. **Gestion de Bloc (alpine2) :** Ajouter un **bloc** de configuration (`blockinfile`) à la fin du fichier `/etc/hosts` sur **`alpine2`** pour y insérer l'adresse IP de `alpine1`, entouré de marqueurs.

@@ -1,0 +1,21 @@
+---
+- name: Ajouter un fichier README dans le répertoire courant des utilisateurs
+  hosts: alpine
+  become: true
+  vars:
+    users:
+      - name: Bob
+        machine: alpine1
+      - name: John
+        machine: alpine2
+    readme_content: |
+      # Bienvenue
+      Ceci est un fichier README pour l'utilisateur {{ item.name }}
+
+  tasks:
+    - name: Créer un fichier README
+      copy:
+        dest: "/home/{{ item.name }}/README"
+        content: "{{ readme_content }}"
+      with_items: "{{ users }}"
+      when: inventory_hostname == item.machine
